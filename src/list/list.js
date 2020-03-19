@@ -1,27 +1,43 @@
 import React from "react";
 import CardComponent from "../card/Card";
 import "./list.css";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Card } from "antd";
 
 export default function ListComponent(props) {
   const { name, cards } = props.props;
+  let buttonType;
   console.log(props, ";istprops");
-  const addNewCard = () => {
-    console.log(props.props.cards);
-    props.props.cards.push({ name: `New card${props.cards.length}` });
+  const addNewCard = targetList => {
+    console.log(targetList);
   };
+  if (cards.length === 1) {
+    buttonType = <Button block>Add new Card</Button>;
+  } else {
+    buttonType = (
+      <Button type="primary" onClick={() => addNewCard(props.props)}>
+        Add card
+      </Button>
+    );
+  }
   return (
-    <div className="list-container">
-      <div className="list-header">
-        <div className="list-header">{name}</div>
-      </div>
+    <Card
+      title={name}
+      extra={
+        <div className="icon-container">
+          <EditOutlined />
+          <DeleteOutlined />
+        </div>
+      }
+      headStyle={{ textAlign: "left" }}
+      className="list-container"
+    >
       <div className="list-card-container">
         {cards.map(card => (
           <CardComponent name={card.name} />
         ))}
       </div>
-      <div className="list-action-btn">
-        <button onClick={addNewCard}>Add new card...</button>
-      </div>
-    </div>
+      <div className="list-action-btn">{buttonType}</div>
+    </Card>
   );
 }

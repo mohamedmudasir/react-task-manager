@@ -1,17 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import { Card } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import "../card/Card.css";
+import ModalComponent from "./modal";
 
 export default function CardComponent(props) {
+  const [modalState, updateModalState] = useState(false);
+  const [modalData, updateModalData] = useState({});
   const { name } = props;
+  const updateModalDataState = targetData => {
+    console.log(targetData, "targetData");
+    updateModalData(targetData);
+    updateModalState(true);
+  };
+
   return (
-    <div className="card-container">
-      <div className="card-header">
-        <div className="title">{name}</div>
-        <div className="card-action-btn">
-          <button>edit</button>
-          <button>color</button>
-        </div>
-      </div>
-    </div>
+    <React.Fragment>
+      <Card
+        title={name}
+        extra={
+          <div className="icon-container">
+            <EditOutlined />
+            <DeleteOutlined />
+          </div>
+        }
+        headStyle={{ textAlign: "left" }}
+        className="card-container"
+        onDoubleClick={() => updateModalDataState(props)}
+      ></Card>
+      <ModalComponent
+        props={modalData}
+        visible={modalState}
+        handleCancel={() => updateModalState(false)}
+      />
+    </React.Fragment>
   );
 }

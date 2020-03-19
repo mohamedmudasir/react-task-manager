@@ -1,15 +1,3 @@
 .card-container {
-    width: 350px;
-    height: 350px;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin: 0 20px 20px;
-}
-
-.card-header {
-    height: 35px;
-    background: lightblue;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin-bottom: 20px;
 }
