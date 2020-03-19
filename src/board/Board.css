@@ -1,0 +1,35 @@
+.board-container {
+    height: 100%;
+    overflow-y: scroll;
+    background: #f2f2f2;
+    padding: 20px;
+}
+
+.card-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.action-btn button {
+    border: none;
+    width: 150px;
+    height: 30px;
+    background: #149ad58c;
+    outline: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+}
+
+.board-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.board-list-container>div {
+    margin-right: 10px;
+}

@@ -1,0 +1,25 @@
+.list-container {
+    width: 400px;
+
+}
+
+.list-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.list-container {
+    width: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid lightgrey;
+}
+
+.list-action-btn {
+    width: 100%;
+}
+
+.list-action-btn button {
+    align-self: flex-start;
+}
