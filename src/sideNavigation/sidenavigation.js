@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./sideNavigation.css";
 import { Drawer } from "antd";
 
 export default function SideNavigation(props) {
-  const [drawerState, updateDrawerState] = useState(false);
   useEffect(() => {
-    console.log(drawerState, "sidenavigaton");
-  }, [drawerState]);
-  const boardList = props.boards.map(board => {
-    return <div>{board.name}</div>;
-  });
-  const closeDrawer = () => {
-    updateDrawerState(false);
-    props.closeDrawer();
+    console.log(props, "sidenavigaton");
+  }, [props.drawerState]);
+  const updateBoard = id => {
+    console.log(id, "navigation");
+    props.updateBoardId(id);
   };
+  const boardList = props.boards.map(({ name, id }) => {
+    return (
+      <div className="board-name" onClick={() => updateBoard(id)}>
+        {name}
+      </div>
+    );
+  });
+
   return (
     <Drawer
       title="Select Board"
       placement="right"
       closable={true}
-      onClose={closeDrawer}
-      visible={drawerState}
+      onClose={props.closeDrawer}
+      visible={props.drawerState}
+      width={350}
     >
       <div className="side-navigation-container">
-        <div class="boards-list">{boardList}</div>
+        <div className="boards-list">{boardList}</div>
       </div>
     </Drawer>
   );

@@ -4,9 +4,9 @@ import "./Board.css";
 import ListComponent from "../list/list";
 
 export default function BoardComponent(props) {
-  const { lists } = props.props;
+  const { lists, id, name } = props.props;
   useEffect(() => {
-    console.log(props, "board");
+    console.log(props.props.id, "board");
   }, [props]);
   return (
     <div className="board-container">
@@ -17,6 +17,9 @@ export default function BoardComponent(props) {
         <Button type="primary" onClick={props.addNewList}>
           Add List ...
         </Button>
+      </div>
+      <div className="board-name">
+        <h1>{name}</h1>
       </div>
       <div className="board-list-container">
         {lists.map((list, i) => (

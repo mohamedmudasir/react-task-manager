@@ -22,6 +22,7 @@ export default function ListComponent(props) {
   }
   return (
     <Card
+      draggable={true}
       title={name}
       extra={
         <div className="icon-container">

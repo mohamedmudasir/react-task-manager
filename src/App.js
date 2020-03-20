@@ -29,7 +29,7 @@ class App extends React.Component {
         },
         {
           id: "BR-223",
-          name: "Default board 1",
+          name: "Default board 2",
           lists: [
             {
               id: "LI-2231",
@@ -38,20 +38,19 @@ class App extends React.Component {
                 { id: "CR-22311", name: "Expand card1" },
                 { id: "CR-22312", name: "Expand card2" }
               ]
-            },
-            {
-              id: "LI-2232",
-              name: "Board component2",
-              cards: [{ id: "22321", name: "Expand card3" }]
             }
           ]
         }
       ],
-      selectedBoard: {},
+      selectedBoardId: "BR-123",
+      selectedBoardData: {},
       openDrawer: false
     };
   }
   componentWillMount() {
+    // this.setState({ selectedBoardData: this.state.boards[0] });
+    this.getCurrentBoardData();
+    console.log(this.state, "app");
     console.log("component will mount");
   }
   componentDidMount() {
@@ -60,8 +59,9 @@ class App extends React.Component {
   componentWillUpdate() {
     console.log("component will update");
   }
-  shouldComponentUpdate() {
+  shouldComponentUpdate(data) {
     console.log("should component update");
+    console.log(data);
     return true;
   }
   componentDidUpdate() {
@@ -73,27 +73,43 @@ class App extends React.Component {
   componentWillUnmount() {
     console.log("component to be destroyed");
   }
-  // addNewList = () => {
-  //   console.log("called from app");
-  //   this.setState({
-  //     boards: {
-  //       lists: [
-  //         ...this.state.boards.lists,
-  //         {
-  //           name: `List ${this.state.boards.lists.length + 1}`,
-  //           cards: [{ name: "Expand card2" }]
-  //         }
-  //       ]
-  //     }
-  //   });
-  //   console.log(this.state, "board component udpate");
-  // };
+  addNewList = boardId => {
+    console.log("called from app", boardId);
+    // this.setState({
+    //   boards: {
+    //     lists: [
+    //       ...this.state.boards.lists,
+    //       {
+    //         name: `List ${this.state.boards.lists.length + 1}`,
+    //         cards: [{ name: "Expand card2" }]
+    //       }
+    //     ]
+    //   }
+    // });
+    // console.log(this.state, "board component udpate");
+  };
   openDrawer = () => {
     this.setState({ openDrawer: true });
     console.log(this.state, "opend");
   };
   closeDrawer = () => {
     this.setState({ openDrawer: false });
+  };
+  updateBoardId = async id => {
+    return await this.setState({ selectedBoardId: id }, () =>
+      this.getCurrentBoardData()
+    );
+  };
+  getCurrentBoardData = () => {
+    console.log(this.state.selectedBoardId);
+    const filteredData = this.state.boards.filter(
+      ({ id }) => id === this.state.selectedBoardId
+    );
+    const selectedBoardData = { ...filteredData[0] };
+    console.log(filteredData, "const");
+    console.log(selectedBoardData, "selectedBoardData");
+    this.setState({ selectedBoardData });
+    console.log(this.state, "state");
   };
   render() {
     return (
@@ -102,11 +118,12 @@ class App extends React.Component {
         <SideNavigation
           boards={this.state.boards}
           drawerState={this.state.openDrawer}
-          closeDrawer={this.openDrawer}
+          closeDrawer={this.closeDrawer}
+          updateBoardId={this.updateBoardId}
         />
         <BoardComponent
-          props={this.state.boards[0]}
-          addNewList={this.addNewList}
+          props={this.state.selectedBoardData}
+          addNewList={() => this.addNewList()}
           changeBoard={this.openDrawer}
         />
       </div>
