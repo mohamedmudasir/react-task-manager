@@ -1,18 +1,51 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import "./sideNavigation.css";
-import { Drawer } from "antd";
+import { Drawer, Button, Input } from "antd";
 
 export default function SideNavigation(props) {
-  useEffect(() => {
-    console.log(props, "sidenavigaton");
-  }, [props.drawerState]);
+  const [btnState, updateBtnState] = useState(props.drawerState);
+  let btnType;
+  if (!btnState) {
+    btnType = (
+      <Button type="primary" block onClick={() => changeBtn(true)}>
+        Add New Board
+      </Button>
+    );
+  } else {
+    btnType = (
+      <Input
+        placeholder="Enter Board Name"
+        onPressEnter={e => createNewBoard(e)}
+      />
+    );
+  }
+
+  const changeBtn = state => {
+    updateBtnState(state);
+  };
+  const closeDrawer = () => {
+    updateBtnState(false);
+    props.closeDrawer();
+  };
+  const createNewBoard = e => {
+    if (e.target.value) {
+      changeBtn(false);
+      props.createNewBoard(e.target.value);
+    }
+  };
   const updateBoard = id => {
     console.log(id, "navigation");
     props.updateBoardId(id);
+    closeDrawer();
   };
   const boardList = props.boards.map(({ name, id }) => {
     return (
-      <div className="board-name" onClick={() => updateBoard(id)}>
+      <div
+        className="board-name"
+        key={id.toString()}
+        style={{ cursor: "pointer" }}
+        onClick={() => updateBoard(id)}
+      >
         {name}
       </div>
     );
@@ -23,13 +56,14 @@ export default function SideNavigation(props) {
       title="Select Board"
       placement="right"
       closable={true}
-      onClose={props.closeDrawer}
+      onClose={closeDrawer}
       visible={props.drawerState}
       width={350}
     >
       <div className="side-navigation-container">
         <div className="boards-list">{boardList}</div>
       </div>
+      {btnType}
     </Drawer>
   );
 }

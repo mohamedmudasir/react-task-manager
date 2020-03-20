@@ -4,7 +4,7 @@ import "./Board.css";
 import ListComponent from "../list/list";
 
 export default function BoardComponent(props) {
-  const { lists, id, name } = props.props;
+  const { lists, name } = props.props;
   useEffect(() => {
     console.log(props.props.id, "board");
   }, [props]);
@@ -23,7 +23,11 @@ export default function BoardComponent(props) {
       </div>
       <div className="board-list-container">
         {lists.map((list, i) => (
-          <ListComponent props={list} key={i.toString()} />
+          <ListComponent
+            props={list}
+            key={i.toString()}
+            addNewCard={props.addNewCard}
+          />
         ))}
       </div>
     </div>

@@ -5,18 +5,23 @@ import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Card } from "antd";
 
 export default function ListComponent(props) {
-  const { name, cards } = props.props;
+  const { name, cards, id } = props.props;
   let buttonType;
   console.log(props, ";istprops");
   const addNewCard = targetList => {
     console.log(targetList);
+    props.addNewCard(targetList);
   };
-  if (cards.length === 1) {
-    buttonType = <Button block>Add new Card</Button>;
+  if (cards.length) {
+    buttonType = (
+      <Button type="primary" onClick={() => addNewCard(id)}>
+        Add card
+      </Button>
+    );
   } else {
     buttonType = (
-      <Button type="primary" onClick={() => addNewCard(props.props)}>
-        Add card
+      <Button block onClick={() => addNewCard(id)}>
+        Add new Card
       </Button>
     );
   }
@@ -35,7 +40,7 @@ export default function ListComponent(props) {
     >
       <div className="list-card-container">
         {cards.map(card => (
-          <CardComponent name={card.name} />
+          <CardComponent key={card.id.toString()} name={card.name} />
         ))}
       </div>
       <div className="list-action-btn">{buttonType}</div>

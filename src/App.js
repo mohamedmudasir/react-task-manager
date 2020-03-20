@@ -48,8 +48,10 @@ class App extends React.Component {
     };
   }
   componentWillMount() {
-    // this.setState({ selectedBoardData: this.state.boards[0] });
-    this.getCurrentBoardData();
+    this.setState(
+      { selectedBoardId: this.state.boards[0].id },
+      this.getCurrentBoardData()
+    );
     console.log(this.state, "app");
     console.log("component will mount");
   }
@@ -73,43 +75,83 @@ class App extends React.Component {
   componentWillUnmount() {
     console.log("component to be destroyed");
   }
-  addNewList = boardId => {
-    console.log("called from app", boardId);
-    // this.setState({
-    //   boards: {
-    //     lists: [
-    //       ...this.state.boards.lists,
-    //       {
-    //         name: `List ${this.state.boards.lists.length + 1}`,
-    //         cards: [{ name: "Expand card2" }]
-    //       }
-    //     ]
-    //   }
-    // });
-    // console.log(this.state, "board component udpate");
+  createNewBoard = boardName => {
+    const newBoardData = {
+      id: `BR-${
+        this.idGenerator(this.state.boards)
+          ? this.idGenerator(this.state.boards) + 1
+          : 1211
+      }`,
+      name: boardName,
+      lists: []
+    };
+    this.setState({ boards: [...this.state.boards, newBoardData] });
+    console.log(this.state);
+  };
+
+  addNewList = () => {
+    const currentBoardData = { ...this.state.selectedBoardData };
+    const currentBoardId = currentBoardData.id.split("-")[1];
+    const { lists } = currentBoardData;
+    lists.push({
+      id: `LI-${
+        this.idGenerator(lists)
+          ? this.idGenerator(lists) + 1
+          : currentBoardId.toString() + 1
+      }`,
+      name: `New List ${lists.length + 1}`,
+      cards: []
+    });
+    const findIndexToReplace = this.state.boards.findIndex(
+      ({ id }) => id === this.state.selectedBoardId
+    );
+    const updateBoardData = [...this.state.boards];
+    updateBoardData[findIndexToReplace] = currentBoardData;
+    this.setState({ boards: [...updateBoardData] });
+    console.log(this.state, "afterupdate");
+  };
+  addNewCard = targetListId => {
+    const currentBoardData = { ...this.state.selectedBoardData };
+    const { lists } = currentBoardData;
+    const indexToReplace = lists.findIndex(({ id }) => id === targetListId);
+    const currentListId = targetListId.split("-")[1];
+    const targetList = lists[indexToReplace];
+    lists[indexToReplace].cards.push({
+      id: `CR-${
+        this.idGenerator(targetList.cards)
+          ? this.idGenerator(targetList.cards) + 1
+          : currentListId.toString() + 1
+      }`,
+      name: `New Card ${lists[indexToReplace].cards.length + 1}`
+    });
+    const boardIndextoReplace = this.state.boards.findIndex(
+      ({ id }) => id === this.state.selectedBoardId
+    );
+    const updateBoardData = [...this.state.boards];
+    updateBoardData[boardIndextoReplace] = currentBoardData;
+    this.setState({ boards: [...updateBoardData] });
+  };
+  idGenerator = data => {
+    const maxId = data.map(currentData => {
+      return currentData.id.split("-")[1];
+    });
+    return Math.max(...maxId);
   };
   openDrawer = () => {
     this.setState({ openDrawer: true });
-    console.log(this.state, "opend");
   };
   closeDrawer = () => {
     this.setState({ openDrawer: false });
   };
-  updateBoardId = async id => {
-    return await this.setState({ selectedBoardId: id }, () =>
-      this.getCurrentBoardData()
-    );
+  updateBoardId = id => {
+    this.setState({ selectedBoardId: id }, () => this.getCurrentBoardData());
   };
   getCurrentBoardData = () => {
-    console.log(this.state.selectedBoardId);
     const filteredData = this.state.boards.filter(
       ({ id }) => id === this.state.selectedBoardId
     );
     const selectedBoardData = { ...filteredData[0] };
-    console.log(filteredData, "const");
-    console.log(selectedBoardData, "selectedBoardData");
     this.setState({ selectedBoardData });
-    console.log(this.state, "state");
   };
   render() {
     return (
@@ -120,10 +162,12 @@ class App extends React.Component {
           drawerState={this.state.openDrawer}
           closeDrawer={this.closeDrawer}
           updateBoardId={this.updateBoardId}
+          createNewBoard={this.createNewBoard}
         />
         <BoardComponent
           props={this.state.selectedBoardData}
           addNewList={() => this.addNewList()}
+          addNewCard={this.addNewCard}
           changeBoard={this.openDrawer}
         />
       </div>
