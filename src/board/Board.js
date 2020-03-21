@@ -8,6 +8,7 @@ export default function BoardComponent(props) {
   useEffect(() => {
     console.log(props.props.id, "board");
   }, [props]);
+
   return (
     <div className="board-container">
       <div className="action-btn">
@@ -27,6 +28,8 @@ export default function BoardComponent(props) {
             props={list}
             key={i.toString()}
             addNewCard={props.addNewCard}
+            editList={props.editList}
+            deleteList={props.deleteList}
           />
         ))}
       </div>

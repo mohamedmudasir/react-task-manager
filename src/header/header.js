@@ -1,5 +1,6 @@
 import React from "react";
 import "./header.css";
+import { HomeFilled, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 export default function HeaderComponent(props) {
   return (
     <div className="header-container">
@@ -10,15 +11,21 @@ export default function HeaderComponent(props) {
       </div>
       <div className="navigation">
         <div className="nav-container">
-          <div className="icon">icon</div>
+          <div className="icon">
+            <HomeFilled />
+          </div>
           <div className="name">Home</div>
         </div>
         <div className="nav-container">
-          <div className="icon">icon</div>
+          <div className="icon">
+            <UserOutlined />
+          </div>
           <div className="name">Profile</div>
         </div>
         <div className="nav-container">
-          <div className="icon">icon</div>
+          <div className="icon">
+            <LogoutOutlined />
+          </div>
           <div className="name">Logout</div>
         </div>
       </div>

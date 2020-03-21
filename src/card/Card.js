@@ -18,12 +18,6 @@ export default function CardComponent(props) {
     <React.Fragment>
       <Card
         title={name}
-        extra={
-          <div className="icon-container">
-            <EditOutlined />
-            <DeleteOutlined />
-          </div>
-        }
         headStyle={{ textAlign: "left" }}
         className="card-container"
         onDoubleClick={() => updateModalDataState(props)}

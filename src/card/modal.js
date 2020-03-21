@@ -26,7 +26,7 @@ export default function ModalComponent(props) {
           className="description-input"
           style={{ width: "calc(100% - 100px)" }}
         >
-          <TextArea />
+          <TextArea placeholder="Enter description" />
         </div>
         <div className="delete-icon" style={{ width: "30px" }}>
           <Button type="primary" icon={<DeleteOutlined />} size={30} />
@@ -36,7 +36,7 @@ export default function ModalComponent(props) {
         className="modal-data"
         style={{ width: "calc(100% - 100px)", marginTop: "30px" }}
       >
-        <TextArea />
+        <TextArea placeholder="Enter comments" />
       </div>
     </Modal>
   );

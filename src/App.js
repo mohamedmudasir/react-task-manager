@@ -61,10 +61,14 @@ class App extends React.Component {
   componentWillUpdate() {
     console.log("component will update");
   }
-  shouldComponentUpdate(data) {
+  shouldComponentUpdate(previousState, currentState) {
+    console.log(previousState, currentState);
     console.log("should component update");
-    console.log(data);
-    return true;
+    if (previousState === currentState) {
+      return false;
+    } else {
+      return true;
+    }
   }
   componentDidUpdate() {
     console.log("component did update");
@@ -110,6 +114,22 @@ class App extends React.Component {
     this.setState({ boards: [...updateBoardData] });
     console.log(this.state, "afterupdate");
   };
+  editList = targetListId => {
+    const filteredList = this.state.selectedBoardData.lists.filter(
+      ({ id }) => id === targetListId
+    );
+  };
+  deleteList = targetListId => {
+    const filteredList = this.state.selectedBoardData.lists.filter(
+      ({ id }) => id !== targetListId
+    );
+    const boardIndextoReplace = this.state.boards.findIndex(
+      ({ id }) => id === this.state.selectedBoardId
+    );
+    const updateBoardData = [...this.state.boards];
+    updateBoardData[boardIndextoReplace].lists = filteredList;
+    this.setState({ boards: updateBoardData }, this.getCurrentBoardData());
+  };
   addNewCard = targetListId => {
     const currentBoardData = { ...this.state.selectedBoardData };
     const { lists } = currentBoardData;
@@ -150,7 +170,7 @@ class App extends React.Component {
     const filteredData = this.state.boards.filter(
       ({ id }) => id === this.state.selectedBoardId
     );
-    const selectedBoardData = { ...filteredData[0] };
+    const selectedBoardData = filteredData[0];
     this.setState({ selectedBoardData });
   };
   render() {
@@ -169,6 +189,8 @@ class App extends React.Component {
           addNewList={() => this.addNewList()}
           addNewCard={this.addNewCard}
           changeBoard={this.openDrawer}
+          editList={this.editList}
+          deleteList={this.deleteList}
         />
       </div>
     );
