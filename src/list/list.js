@@ -3,6 +3,7 @@ import CardComponent from "../card/Card";
 import "./list.css";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Card, Input } from "antd";
+import { Droppable } from "react-beautiful-dnd";
 
 export default function ListComponent(props) {
   const { name, cards, id } = props.props;
@@ -61,15 +62,25 @@ export default function ListComponent(props) {
       headStyle={{ textAlign: "left" }}
       className="list-container"
     >
-      <div className="list-card-container">
-        {cards.map(card => (
-          <CardComponent
-            draggable="true"
-            key={card.id.toString()}
-            name={card.name}
-          />
-        ))}
-      </div>
+      <Droppable droppableId={id}>
+        {provided => (
+          <div
+            className="list-card-container"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {cards.map((card, index) => (
+              <CardComponent
+                draggable="true"
+                key={card.id.toString()}
+                props={card}
+                index={index}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
       <div className="list-action-btn">{buttonType}</div>
     </Card>
   );

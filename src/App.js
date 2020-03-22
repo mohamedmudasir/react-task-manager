@@ -3,6 +3,7 @@ import "./App.css";
 import BoardComponent from "./board/Board";
 import HeaderComponent from "./header/header";
 import SideNavigation from "./sideNavigation/sidenavigation";
+import { DragDropContext } from "react-beautiful-dnd";
 class App extends React.Component {
   constructor() {
     super();
@@ -118,6 +119,7 @@ class App extends React.Component {
     const filteredList = this.state.selectedBoardData.lists.filter(
       ({ id }) => id === targetListId
     );
+    console.log(filteredList);
   };
   deleteList = targetListId => {
     const filteredList = this.state.selectedBoardData.lists.filter(
@@ -173,6 +175,58 @@ class App extends React.Component {
     const selectedBoardData = filteredData[0];
     this.setState({ selectedBoardData });
   };
+  handleDragEnd = result => {
+    console.log(result);
+    const { draggableId, source, destination } = result;
+    const startIndex = source.index;
+    const endIndex = destination.index;
+    const srcParentId = source.droppableId;
+    const destinationParentId = destination.droppableId;
+    const currentBoardIndex = this.state.boards.findIndex(
+      ({ id }) => id === this.state.selectedBoardId
+    );
+    if (srcParentId === destinationParentId) {
+      const srcListIndex = this.state.selectedBoardData.lists.findIndex(
+        ({ id }) => id === srcParentId
+      );
+      const updatedCardData = this.state.selectedBoardData.lists[srcListIndex]
+        .cards;
+      [updatedCardData[startIndex], updatedCardData[endIndex]] = [
+        updatedCardData[endIndex],
+        updatedCardData[startIndex]
+      ];
+      this.setState(previousState => {
+        previousState.boards[currentBoardIndex] =
+          previousState.selectedBoardData;
+        return { boards: previousState.boards };
+      });
+    } else {
+      const currentBoardData = { ...this.state.selectedBoardData };
+      const srcParentIndex = currentBoardData.lists.findIndex(
+        ({ id }) => id === srcParentId
+      );
+      const desParentIndex = currentBoardData.lists.findIndex(
+        ({ id }) => id === destinationParentId
+      );
+      const srcData = currentBoardData.lists[srcParentIndex].cards.filter(
+        ({ id }) => id === draggableId
+      )[0];
+      const desCardData = currentBoardData.lists[desParentIndex].cards;
+      currentBoardData.lists[srcParentIndex].cards.splice(startIndex, 1);
+      endIndex
+        ? desCardData.splice(endIndex, 0, srcData)
+        : desCardData.push(srcData);
+      this.setState(previousState => {
+        previousState.boards[currentBoardIndex] = currentBoardData;
+        return { boards: previousState.boards };
+      });
+
+      console.log("to another list");
+    }
+  };
+  handleDragUpdate = result => {
+    console.log(result, "update");
+  };
   render() {
     return (
       <div className="App">
@@ -184,14 +238,19 @@ class App extends React.Component {
           updateBoardId={this.updateBoardId}
           createNewBoard={this.createNewBoard}
         />
-        <BoardComponent
-          props={this.state.selectedBoardData}
-          addNewList={() => this.addNewList()}
-          addNewCard={this.addNewCard}
-          changeBoard={this.openDrawer}
-          editList={this.editList}
-          deleteList={this.deleteList}
-        />
+        <DragDropContext
+          onDragEnd={this.handleDragEnd}
+          onDragUpdate={this.handleDragUpdate}
+        >
+          <BoardComponent
+            props={this.state.selectedBoardData}
+            addNewList={() => this.addNewList()}
+            addNewCard={this.addNewCard}
+            changeBoard={this.openDrawer}
+            editList={this.editList}
+            deleteList={this.deleteList}
+          />
+        </DragDropContext>
       </div>
     );
   }

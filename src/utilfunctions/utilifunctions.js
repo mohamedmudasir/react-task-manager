@@ -13,6 +13,3 @@ export function addNewList(props) {
   });
   console.log(this.state, "board component udpate");
 }
-export default function addNewCard(props) {
-  this.setState({});
-}
