@@ -33,7 +33,17 @@ export default function CardComponent(props) {
           >
             <Card
               title={name}
-              headStyle={{ textAlign: "left" }}
+              headStyle={{
+                textAlign: "left",
+                borderBottom: "1px solid #00000040",
+                background: "rgba(98, 201, 199, 0.19)",
+                fontWeight: "600"
+              }}
+              style={{
+                border: "1px solid #00000040",
+                boxShadow: "0.5px 0.5px 1px 1px #d3d3d3de",
+                background: "white"
+              }}
               className="card-container"
               onDoubleClick={() => updateModalDataState(props.props)}
             ></Card>
