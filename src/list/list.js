@@ -77,6 +77,8 @@ export default function ListComponent(props) {
                     key={card.id}
                     props={card}
                     index={index}
+                    deleteCard={props.deleteCard}
+                    listId={id}
                   />
                 ))}
               </div>

@@ -10,7 +10,7 @@ export default function ModalComponent(props) {
     <Modal
       title={name}
       visible={props.visible}
-      onOk={props.handleOk}
+      onOk={props.saveCardData}
       onCancel={props.handleCancel}
       width={800}
     >
@@ -29,7 +29,12 @@ export default function ModalComponent(props) {
           <TextArea placeholder="Enter description" />
         </div>
         <div className="delete-icon" style={{ width: "30px" }}>
-          <Button type="primary" icon={<DeleteOutlined />} size={30} />
+          <Button
+            type="primary"
+            icon={<DeleteOutlined />}
+            size={30}
+            onClick={props.deleteCard}
+          />
         </div>
       </div>
       <div

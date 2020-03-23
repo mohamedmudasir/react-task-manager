@@ -168,6 +168,26 @@ class App extends React.Component {
     this.setState({ boards: [...updateBoardData] });
     console.log(this.state);
   };
+  deleteCard = (cardId, listId) => {
+    const currentBoardData = { ...this.state.selectedBoardData };
+    const listIndexToUpdate = currentBoardData.lists.findIndex(
+      ({ id }) => id === listId
+    );
+    const cardIndexToUpdate = currentBoardData.lists[
+      listIndexToUpdate
+    ].cards.findIndex(({ id }) => id === cardId);
+    currentBoardData.lists[listIndexToUpdate].cards.splice(
+      cardIndexToUpdate,
+      1
+    );
+    this.setState(previousState => {
+      const currentBoardIndex = previousState.boards.findIndex(
+        ({ id }) => id === previousState.selectedBoardId
+      );
+      previousState.boards[currentBoardIndex] = currentBoardData;
+      return { boards: previousState.boards };
+    });
+  };
 
   /** Id generator for new card, list and board
    * @param  data array to be iterated to find last id
@@ -278,6 +298,7 @@ class App extends React.Component {
             props={this.state.selectedBoardData}
             addNewList={() => this.addNewList()}
             addNewCard={this.addNewCard}
+            deleteCard={this.deleteCard}
             changeBoard={this.openDrawer}
             editList={this.editList}
             deleteList={this.deleteList}

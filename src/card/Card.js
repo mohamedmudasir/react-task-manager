@@ -8,11 +8,17 @@ export default function CardComponent(props) {
   const [modalState, updateModalState] = useState(false);
   const [modalData, updateModalData] = useState({});
   const { name, id } = props.props;
+  console.log(props, "card");
 
   /** Update select card data to modal */
   const updateModalDataState = targetData => {
     updateModalData(targetData);
     updateModalState(true);
+  };
+  const saveCardData = () => {};
+  const deleteCard = () => {
+    props.deleteCard(modalData.id, props.listId);
+    updateModalState(false);
   };
 
   return (
@@ -38,6 +44,8 @@ export default function CardComponent(props) {
         props={modalData}
         visible={modalState}
         handleCancel={() => updateModalState(false)}
+        saveCardData={saveCardData}
+        deleteCard={deleteCard}
       />
     </React.Fragment>
   );

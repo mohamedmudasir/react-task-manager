@@ -28,6 +28,7 @@ export default function BoardComponent(props) {
             props={list}
             key={i.toString()}
             addNewCard={props.addNewCard}
+            deleteCard={props.deleteCard}
             editList={props.editList}
             deleteList={props.deleteList}
           />
