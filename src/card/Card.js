@@ -8,8 +8,9 @@ export default function CardComponent(props) {
   const [modalState, updateModalState] = useState(false);
   const [modalData, updateModalData] = useState({});
   const { name, id } = props.props;
+
+  /** Update select card data to modal */
   const updateModalDataState = targetData => {
-    console.log(targetData, "targetData");
     updateModalData(targetData);
     updateModalState(true);
   };
@@ -28,7 +29,7 @@ export default function CardComponent(props) {
               title={name}
               headStyle={{ textAlign: "left" }}
               className="card-container"
-              onDoubleClick={() => updateModalDataState(props)}
+              onDoubleClick={() => updateModalDataState(props.props)}
             ></Card>
           </div>
         )}

@@ -11,6 +11,9 @@ export default function BoardComponent(props) {
 
   return (
     <div className="board-container">
+      <div className="board-name" style={{ marginBottom: "30px" }}>
+        <h1>{name}</h1>
+      </div>
       <div className="action-btn">
         <Button type="primary" onClick={props.changeBoard}>
           Change Board
@@ -18,9 +21,6 @@ export default function BoardComponent(props) {
         <Button type="primary" onClick={props.addNewList}>
           Add List ...
         </Button>
-      </div>
-      <div className="board-name">
-        <h1>{name}</h1>
       </div>
       <div className="board-list-container">
         {lists.map((list, i) => (

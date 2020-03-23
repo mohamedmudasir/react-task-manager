@@ -12,6 +12,8 @@ export default function ListComponent(props) {
   const addNewCard = targetList => {
     props.addNewCard(targetList);
   };
+
+  /** Block and colored button render based on card length */
   if (cards.length) {
     buttonType = (
       <Button type="primary" onClick={() => addNewCard(id)}>
@@ -25,12 +27,14 @@ export default function ListComponent(props) {
       </Button>
     );
   }
+  /** Enable list name editable */
   const enableEdit = () => {
     editState(!listEdit);
   };
   const editList = (e, listId) => {
     props.editList(listId);
   };
+
   const deleteList = listsId => {
     props.deleteList(listsId);
   };
@@ -48,40 +52,40 @@ export default function ListComponent(props) {
     </div>
   ) : null;
   return (
-    <Card
-      title={name}
-      extra={
-        <React.Fragment>
-          {editListName}
-          <div className="icon-container">
-            <EditOutlined onClick={enableEdit} />
-            <DeleteOutlined onClick={() => deleteList(id)} />
-          </div>
-        </React.Fragment>
-      }
-      headStyle={{ textAlign: "left" }}
-      className="list-container"
-    >
+    <div>
       <Droppable droppableId={id}>
         {provided => (
-          <div
-            className="list-card-container"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {cards.map((card, index) => (
-              <CardComponent
-                draggable="true"
-                key={card.id.toString()}
-                props={card}
-                index={index}
-              />
-            ))}
-            {provided.placeholder}
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            <Card
+              title={name}
+              extra={
+                <React.Fragment>
+                  {editListName}
+                  <div className="icon-container">
+                    <EditOutlined onClick={enableEdit} />
+                    <DeleteOutlined onClick={() => deleteList(id)} />
+                  </div>
+                </React.Fragment>
+              }
+              headStyle={{ textAlign: "left" }}
+              className="list-container"
+            >
+              <div className="list-card-container">
+                {cards.map((card, index) => (
+                  <CardComponent
+                    draggable="true"
+                    key={card.id}
+                    props={card}
+                    index={index}
+                  />
+                ))}
+              </div>
+              {provided.placeholder}
+              <div className="list-action-btn">{buttonType}</div>
+            </Card>
           </div>
         )}
       </Droppable>
-      <div className="list-action-btn">{buttonType}</div>
-    </Card>
+    </div>
   );
 }
