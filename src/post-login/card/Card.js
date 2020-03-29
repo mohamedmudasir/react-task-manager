@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card } from "antd";
-import "../card/Card.css";
+import "./Card.css";
 import ModalComponent from "./modal";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -8,7 +8,6 @@ export default function CardComponent(props) {
   const [modalState, updateModalState] = useState(false);
   const [modalData, updateModalData] = useState({});
   const { name, id } = props.props;
-  console.log(props, "card");
 
   /** Update select card data to modal */
   const updateModalDataState = targetData => {
@@ -32,21 +31,21 @@ export default function CardComponent(props) {
             type="card"
           >
             <Card
-              title={name}
-              headStyle={{
-                textAlign: "left",
-                borderBottom: "1px solid #00000040",
-                background: "rgba(98, 201, 199, 0.19)",
-                fontWeight: "600"
-              }}
               style={{
-                border: "1px solid #00000040",
-                boxShadow: "0.5px 0.5px 1px 1px #d3d3d3de",
-                background: "white"
+                borderRadius: "5px",
+                border: "1px solid #b1b2b27a",
+                boxShadow: "1px 1px 1px 1px #b1b2b273"
               }}
               className="card-container"
               onDoubleClick={() => updateModalDataState(props.props)}
-            ></Card>
+            >
+              <div
+                className="card-name"
+                style={{ textAlign: "left", fontSize: "16px", color: "black" }}
+              >
+                {name}
+              </div>
+            </Card>
           </div>
         )}
       </Draggable>

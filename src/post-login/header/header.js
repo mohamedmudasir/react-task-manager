@@ -1,13 +1,13 @@
 import React from "react";
 import "./header.css";
-import { HomeFilled, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Avatar } from "antd";
+import { HomeFilled, UserOutlined } from "@ant-design/icons";
+import { LogoComponent } from "../../shared/components/logo";
 export default function HeaderComponent(props) {
   return (
     <div className="header-container">
-      <div className="logo" style={{ display: "flex", flexDirection: "row" }}>
-        <div className="icon">
-          <div className="name">Atlassian</div>
-        </div>
+      <div className="logo">
+        <LogoComponent color="white" />
       </div>
       <div className="navigation">
         <div className="nav-container">
@@ -24,9 +24,8 @@ export default function HeaderComponent(props) {
         </div>
         <div className="nav-container">
           <div className="icon">
-            <LogoutOutlined />
+            <Avatar>MM</Avatar>
           </div>
-          <div className="name">Logout</div>
         </div>
       </div>
     </div>

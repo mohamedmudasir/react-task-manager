@@ -1,6 +1,5 @@
 .list-container {
-    width: 400px;
-    max-height: 500px;
+    width: 350px;
     position: relative;
 }
 
@@ -28,6 +27,7 @@
 
 .list-action-btn {
     width: 100%;
+    text-align: center;
 }
 
 .list-action-btn button {

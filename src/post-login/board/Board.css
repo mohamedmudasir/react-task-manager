@@ -1,7 +1,6 @@
 .board-container {
     height: 100%;
     overflow-y: scroll;
-    background: #f2f2f2;
     padding: 20px;
 }
 
@@ -13,14 +12,15 @@
 }
 
 .action-btn {
-    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .action-btn button {
-    width: 150px;
+    width: auto;
+    padding: 0 10px;
     height: 30px;
     font-weight: bold;
-    margin-right: 30px;
+    margin-right: 20px;
 }
 
 .board-list-container {

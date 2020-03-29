@@ -11,20 +11,31 @@ export default function BoardComponent(props) {
 
   return (
     <div className="board-container">
-      <div className="board-name" style={{ marginBottom: "30px" }}>
-        <h1>{name}</h1>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          marginBottom: "30px"
+        }}
+      >
+        <div className="board-name">
+          <div style={{ color: "white", fontSize: "25px" }}>{name}</div>
+        </div>
+        <div className="action-btn">
+          <Button type="primary" onClick={props.changeBoard}>
+            Change Board
+          </Button>
+          <Button type="primary" onClick={props.addNewList}>
+            Add List
+          </Button>
+        </div>
       </div>
-      <div className="action-btn">
-        <Button type="primary" onClick={props.changeBoard}>
-          Change Board
-        </Button>
-        <Button type="primary" onClick={props.addNewList}>
-          Add List ...
-        </Button>
-      </div>
+
       <div className="board-list-container">
         {lists.map((list, i) => (
           <ListComponent
+            tComponent
             props={list}
             key={i.toString()}
             addNewCard={props.addNewCard}

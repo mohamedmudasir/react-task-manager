@@ -1,8 +1,10 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import BoardComponent from "./board/Board";
-import HeaderComponent from "./header/header";
-import SideNavigation from "./sideNavigation/sidenavigation";
+import BoardComponent from "./post-login/board/Board";
+import HeaderComponent from "./post-login/header/header";
+import SideNavigation from "./post-login/sideNavigation/sidenavigation";
+import LoginComponent from "./pre-login/login";
 import { DragDropContext } from "react-beautiful-dnd";
 class App extends React.Component {
   constructor() {
@@ -45,7 +47,8 @@ class App extends React.Component {
       ],
       selectedBoardId: "BR-123",
       selectedBoardData: {},
-      openDrawer: false
+      openDrawer: false,
+      backgroundColor: "rgb(75, 191, 107)"
     };
   }
   componentWillMount() {
@@ -53,8 +56,10 @@ class App extends React.Component {
       { selectedBoardId: this.state.boards[0].id },
       this.getCurrentBoardData()
     );
-    console.log(this.state, "app");
     console.log("component will mount");
+    document.getElementById(
+      "root"
+    ).style.background = this.state.backgroundColor;
   }
   componentDidMount() {
     console.log("component did mount");
@@ -63,7 +68,6 @@ class App extends React.Component {
     console.log("component will update");
   }
   shouldComponentUpdate(previousState, currentState) {
-    console.log(previousState, currentState);
     console.log("should component update");
     if (previousState === currentState) {
       return false;
@@ -166,7 +170,6 @@ class App extends React.Component {
     const updateBoardData = [...this.state.boards];
     updateBoardData[boardIndextoReplace] = currentBoardData;
     this.setState({ boards: [...updateBoardData] });
-    console.log(this.state);
   };
   deleteCard = (cardId, listId) => {
     const currentBoardData = { ...this.state.selectedBoardData };
@@ -229,7 +232,6 @@ class App extends React.Component {
    * @param result drag and drop data
    */
   handleDragEnd = result => {
-    console.log(result);
     /**Drop only inside a list */
     if (result.destination) {
       const { draggableId, source, destination } = result;
@@ -277,34 +279,43 @@ class App extends React.Component {
           previousState.boards[currentBoardIndex] = currentBoardData;
           return { boards: previousState.boards };
         });
-        console.log("to another list");
       }
     }
   };
-
   render() {
     return (
-      <div className="App">
-        <HeaderComponent />
-        <SideNavigation
-          boards={this.state.boards}
-          drawerState={this.state.openDrawer}
-          closeDrawer={this.closeDrawer}
-          updateBoardId={this.updateBoardId}
-          createNewBoard={this.createNewBoard}
-        />
-        <DragDropContext onDragEnd={this.handleDragEnd}>
-          <BoardComponent
-            props={this.state.selectedBoardData}
-            addNewList={() => this.addNewList()}
-            addNewCard={this.addNewCard}
-            deleteCard={this.deleteCard}
-            changeBoard={this.openDrawer}
-            editList={this.editList}
-            deleteList={this.deleteList}
-          />
-        </DragDropContext>
-      </div>
+      <React.Fragment>
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              <LoginComponent />
+            </Route>
+            <Route path="/dashboard">
+              <div className="App">
+                <HeaderComponent />
+                <SideNavigation
+                  boards={this.state.boards}
+                  drawerState={this.state.openDrawer}
+                  closeDrawer={this.closeDrawer}
+                  updateBoardId={this.updateBoardId}
+                  createNewBoard={this.createNewBoard}
+                />
+                <DragDropContext onDragEnd={this.handleDragEnd}>
+                  <BoardComponent
+                    props={this.state.selectedBoardData}
+                    addNewList={() => this.addNewList()}
+                    addNewCard={this.addNewCard}
+                    deleteCard={this.deleteCard}
+                    changeBoard={this.openDrawer}
+                    editList={this.editList}
+                    deleteList={this.deleteList}
+                  />
+                </DragDropContext>
+              </div>
+            </Route>
+          </Switch>
+        </Router>
+      </React.Fragment>
     );
   }
 }
