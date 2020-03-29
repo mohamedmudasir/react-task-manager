@@ -81,7 +81,7 @@ export default function ListComponent(props) {
               {cards.map((card, index) => (
                 <CardComponent
                   draggable="true"
-                  key={card.id}
+                  key={card.id.toString()}
                   props={card}
                   index={index}
                   deleteCard={props.deleteCard}

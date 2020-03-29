@@ -103,25 +103,23 @@ class App extends React.Component {
 
   /** To add new List - called from list component */
   addNewList = () => {
-    const currentBoardData = { ...this.state.selectedBoardData };
-    const currentBoardId = currentBoardData.id.split("-")[1];
-    const { lists } = currentBoardData;
-    lists.push({
+    const { lists, id } = this.state.selectedBoardData;
+    const payload = {
       id: `LI-${
         this.idGenerator(lists)
           ? this.idGenerator(lists) + 1
-          : currentBoardId.toString() + 1
+          : id.split("-")[1].toString() + 1
       }`,
       name: `New List ${lists.length + 1}`,
       cards: []
+    };
+    this.setState(previousState => {
+      const boardIndexToReplace = previousState.boards.findIndex(
+        ({ id }) => id === previousState.selectedBoardId
+      );
+      previousState.boards[boardIndexToReplace].lists.push(payload);
+      return { boards: previousState.boards };
     });
-    const findIndexToReplace = this.state.boards.findIndex(
-      ({ id }) => id === this.state.selectedBoardId
-    );
-    const updateBoardData = [...this.state.boards];
-    updateBoardData[findIndexToReplace] = currentBoardData;
-    console.log(updateBoardData, "list added");
-    this.setState({ boards: [...updateBoardData] });
   };
 
   /**To edit list name  - to be implemented */
@@ -151,25 +149,26 @@ class App extends React.Component {
    * @param targetListId listid in which card to be added
    */
   addNewCard = targetListId => {
-    const currentBoardData = { ...this.state.selectedBoardData };
-    const { lists } = currentBoardData;
-    const indexToReplace = lists.findIndex(({ id }) => id === targetListId);
-    const currentListId = targetListId.split("-")[1];
-    const targetList = lists[indexToReplace];
-    lists[indexToReplace].cards.push({
+    const { lists } = this.state.selectedBoardData;
+    const listIndexToReplace = lists.findIndex(({ id }) => id === targetListId);
+    const targetList = lists[listIndexToReplace];
+    const payload = {
       id: `CR-${
         this.idGenerator(targetList.cards)
           ? this.idGenerator(targetList.cards) + 1
-          : currentListId.toString() + 1
+          : targetListId.split("-")[1].toString() + 1
       }`,
-      name: `New Card ${lists[indexToReplace].cards.length + 1}`
+      name: `New Card ${targetList.cards.length + 1}`
+    };
+    this.setState(previousState => {
+      const boardIndexToReplace = previousState.boards.findIndex(
+        ({ id }) => id === previousState.selectedBoardId
+      );
+      previousState.boards[boardIndexToReplace].lists[
+        listIndexToReplace
+      ].cards.push(payload);
+      return { boards: previousState.boards };
     });
-    const boardIndextoReplace = this.state.boards.findIndex(
-      ({ id }) => id === this.state.selectedBoardId
-    );
-    const updateBoardData = [...this.state.boards];
-    updateBoardData[boardIndextoReplace] = currentBoardData;
-    this.setState({ boards: [...updateBoardData] });
   };
   deleteCard = (cardId, listId) => {
     const currentBoardData = { ...this.state.selectedBoardData };
