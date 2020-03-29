@@ -37,7 +37,7 @@ export default function BoardComponent(props) {
           <ListComponent
             tComponent
             props={list}
-            key={i.toString()}
+            key={list.id.toString()}
             addNewCard={props.addNewCard}
             deleteCard={props.deleteCard}
             editList={props.editList}

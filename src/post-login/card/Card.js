@@ -23,7 +23,7 @@ export default function CardComponent(props) {
   return (
     <React.Fragment>
       <Draggable draggableId={id} index={props.index}>
-        {provided => (
+        {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
             {...provided.draggableProps}
@@ -32,16 +32,18 @@ export default function CardComponent(props) {
           >
             <Card
               style={{
+                color: "black",
                 borderRadius: "5px",
                 border: "1px solid #b1b2b27a",
-                boxShadow: "1px 1px 1px 1px #b1b2b273"
+                boxShadow: "1px 1px 1px 1px #b1b2b273",
+                background: snapshot.isDragging ? "#00bcd47a" : "inherit"
               }}
               className="card-container"
               onDoubleClick={() => updateModalDataState(props.props)}
             >
               <div
                 className="card-name"
-                style={{ textAlign: "left", fontSize: "16px", color: "black" }}
+                style={{ textAlign: "left", fontSize: "16px" }}
               >
                 {name}
               </div>
