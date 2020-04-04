@@ -20,15 +20,15 @@ class App extends React.Component {
               name: "Home",
               cards: [
                 { id: "CR-12311", name: "Expenses- Jan" },
-                { id: "CR-12312", name: "Expenses - April" }
-              ]
+                { id: "CR-12312", name: "Expenses - April" },
+              ],
             },
             {
               id: "LI-1232",
               name: "Mobile",
-              cards: [{ id: "CR-12321", name: "Mobile expenses - Jan" }]
-            }
-          ]
+              cards: [{ id: "CR-12321", name: "Mobile expenses - Jan" }],
+            },
+          ],
         },
         {
           id: "BR-223",
@@ -39,16 +39,16 @@ class App extends React.Component {
               name: "Australia",
               cards: [
                 { id: "CR-22311", name: "Travel-apr expenses" },
-                { id: "CR-22312", name: "Travel May expenses" }
-              ]
-            }
-          ]
-        }
+                { id: "CR-22312", name: "Travel May expenses" },
+              ],
+            },
+          ],
+        },
       ],
       selectedBoardId: "BR-123",
       selectedBoardData: {},
       openDrawer: false,
-      backgroundColor: "rgb(75, 191, 107)"
+      backgroundColor: "rgb(75, 191, 107)",
     };
   }
   componentWillMount() {
@@ -88,7 +88,7 @@ class App extends React.Component {
   /** Function to create new board
    * @param boardName Name given in input field
    */
-  createNewBoard = boardName => {
+  createNewBoard = (boardName) => {
     const newBoardData = {
       id: `BR-${
         this.idGenerator(this.state.boards)
@@ -96,7 +96,7 @@ class App extends React.Component {
           : 1211
       }`,
       name: boardName,
-      lists: []
+      lists: [],
     };
     this.setState({ boards: [...this.state.boards, newBoardData] });
   };
@@ -111,9 +111,9 @@ class App extends React.Component {
           : id.split("-")[1].toString() + 1
       }`,
       name: `New List ${lists.length + 1}`,
-      cards: []
+      cards: [],
     };
-    this.setState(previousState => {
+    this.setState((previousState) => {
       const boardIndexToReplace = previousState.boards.findIndex(
         ({ id }) => id === previousState.selectedBoardId
       );
@@ -123,7 +123,7 @@ class App extends React.Component {
   };
 
   /**To edit list name  - to be implemented */
-  editList = targetListId => {
+  editList = (targetListId) => {
     const filteredList = this.state.selectedBoardData.lists.filter(
       ({ id }) => id === targetListId
     );
@@ -133,7 +133,7 @@ class App extends React.Component {
   /** Delete list
    * @param targetListId list id to be deleted
    */
-  deleteList = targetListId => {
+  deleteList = (targetListId) => {
     const filteredList = this.state.selectedBoardData.lists.filter(
       ({ id }) => id !== targetListId
     );
@@ -148,7 +148,7 @@ class App extends React.Component {
   /** Add new card
    * @param targetListId listid in which card to be added
    */
-  addNewCard = targetListId => {
+  addNewCard = (targetListId) => {
     const { lists } = this.state.selectedBoardData;
     const listIndexToReplace = lists.findIndex(({ id }) => id === targetListId);
     const targetList = lists[listIndexToReplace];
@@ -158,9 +158,9 @@ class App extends React.Component {
           ? this.idGenerator(targetList.cards) + 1
           : targetListId.split("-")[1].toString() + 1
       }`,
-      name: `New Card ${targetList.cards.length + 1}`
+      name: `New Card ${targetList.cards.length + 1}`,
     };
-    this.setState(previousState => {
+    this.setState((previousState) => {
       const boardIndexToReplace = previousState.boards.findIndex(
         ({ id }) => id === previousState.selectedBoardId
       );
@@ -182,7 +182,7 @@ class App extends React.Component {
       cardIndexToUpdate,
       1
     );
-    this.setState(previousState => {
+    this.setState((previousState) => {
       const currentBoardIndex = previousState.boards.findIndex(
         ({ id }) => id === previousState.selectedBoardId
       );
@@ -194,8 +194,8 @@ class App extends React.Component {
   /** Id generator for new card, list and board
    * @param  data array to be iterated to find last id
    */
-  idGenerator = data => {
-    const maxId = data.map(currentData => {
+  idGenerator = (data) => {
+    const maxId = data.map((currentData) => {
       return currentData.id.split("-")[1];
     });
     return maxId.length ? Math.max(...maxId) : 0;
@@ -214,7 +214,7 @@ class App extends React.Component {
   /** Select current board
    * @param id selected board id from side navigation
    */
-  updateBoardId = id => {
+  updateBoardId = (id) => {
     this.setState({ selectedBoardId: id }, () => this.getCurrentBoardData());
   };
 
@@ -230,57 +230,54 @@ class App extends React.Component {
   /**Update state after card is dropped
    * @param result drag and drop data
    */
-  handleDragEnd = result => {
+  handleDragEnd = (result) => {
     /**Drop only inside a list */
-    if (result.destination) {
-      const { draggableId, source, destination } = result;
-      const startIndex = source.index;
+    console.log(result, "result");
+    const { draggableId, source, destination } = result;
+    const startIndex = source.index;
+    const srcParentId = source.droppableId;
+    if (destination) {
+      /** Drop logic for same list */
       const endIndex = destination.index;
-      const srcParentId = source.droppableId;
       const destinationParentId = destination.droppableId;
-      const currentBoardIndex = this.state.boards.findIndex(
-        ({ id }) => id === this.state.selectedBoardId
-      );
       if (srcParentId === destinationParentId) {
-        /** Drop logic for same list */
         const srcListIndex = this.state.selectedBoardData.lists.findIndex(
           ({ id }) => id === srcParentId
         );
-        const updatedCardData = this.state.selectedBoardData.lists[srcListIndex]
-          .cards;
-        [updatedCardData[startIndex], updatedCardData[endIndex]] = [
-          updatedCardData[endIndex],
-          updatedCardData[startIndex]
-        ];
-        this.setState(previousState => {
-          previousState.boards[currentBoardIndex] =
-            previousState.selectedBoardData;
+        this.setState((previousState) => {
+          const srcListData =
+            previousState.selectedBoardData.lists[srcListIndex];
+          const srcCardData = srcListData.cards[startIndex];
+          srcListData.cards.splice(startIndex, 1);
+          srcListData.cards.splice(endIndex, 0, srcCardData);
           return { boards: previousState.boards };
         });
       } else {
         /**Drop logic for different list */
-        const currentBoardData = { ...this.state.selectedBoardData };
-        const srcParentIndex = currentBoardData.lists.findIndex(
+        const currentBoardData = this.state.selectedBoardData;
+        const srcListIndex = currentBoardData.lists.findIndex(
           ({ id }) => id === srcParentId
         );
-        const desParentIndex = currentBoardData.lists.findIndex(
+        const desListIndex = currentBoardData.lists.findIndex(
           ({ id }) => id === destinationParentId
         );
-        const srcData = currentBoardData.lists[srcParentIndex].cards.filter(
-          ({ id }) => id === draggableId
-        )[0];
-        const desCardData = currentBoardData.lists[desParentIndex].cards;
-        currentBoardData.lists[srcParentIndex].cards.splice(startIndex, 1);
-        result.destination
-          ? desCardData.splice(endIndex, 0, srcData)
-          : desCardData.push(srcData);
-        this.setState(previousState => {
-          previousState.boards[currentBoardIndex] = currentBoardData;
+        this.setState((previousState) => {
+          const boardData = previousState.selectedBoardData;
+          const srcCardData = boardData.lists[srcListIndex].cards[startIndex];
+          boardData.lists[srcListIndex].cards.splice(startIndex, 1);
+          boardData.lists[desListIndex].cards.length
+            ? boardData.lists[desListIndex].cards.splice(
+                endIndex,
+                0,
+                srcCardData
+              )
+            : boardData.lists[desListIndex].cards.push(srcCardData);
           return { boards: previousState.boards };
         });
       }
     }
   };
+  handleCardDragDrop(result) {}
   render() {
     return (
       <React.Fragment>

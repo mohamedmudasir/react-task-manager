@@ -11,7 +11,7 @@ export default function LoginComponent(props) {
   };
   return (
     <div className="login-container">
-      <div className="logo" style={{ marginBottom: "20px" }}>
+      <div className="logo" style={{ marginBottom: "20px", marginLeft: "0px" }}>
         <LogoComponent color="#0489da" />
       </div>
       <div className="form-container">
@@ -33,7 +33,7 @@ export default function LoginComponent(props) {
                 color: "white",
                 fontWeight: "bold",
                 height: "35px",
-                borderRadius: "4px"
+                borderRadius: "4px",
               }}
               onClick={authenticateUser}
             >
