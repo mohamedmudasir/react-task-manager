@@ -6,6 +6,7 @@ import HeaderComponent from "./post-login/header/header";
 import SideNavigation from "./post-login/sideNavigation/sidenavigation";
 import LoginComponent from "./pre-login/login";
 import { DragDropContext } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
 class App extends React.Component {
   constructor() {
     super();
@@ -101,11 +102,7 @@ class App extends React.Component {
    */
   createNewBoard = (boardName) => {
     const newBoardData = {
-      id: `BR-${
-        this.idGenerator(this.state.boards)
-          ? this.idGenerator(this.state.boards) + 1
-          : 510
-      }`,
+      id: `BR-${uuidv4()}`,
       name: boardName,
       lists: [],
     };
@@ -116,11 +113,7 @@ class App extends React.Component {
   addNewList = () => {
     const { lists, id } = this.state.selectedBoardData;
     const payload = {
-      id: `LI-${
-        this.idGenerator(lists)
-          ? this.idGenerator(lists) + 1
-          : id.split("-")[1].toString() + 1
-      }`,
+      id: `LI-${uuidv4()}`,
       name: `New List ${lists.length + 1}`,
       cards: [],
     };
@@ -163,12 +156,9 @@ class App extends React.Component {
     const { lists } = this.state.selectedBoardData;
     const listIndexToReplace = lists.findIndex(({ id }) => id === targetListId);
     const targetList = lists[listIndexToReplace];
+
     const payload = {
-      id: `CR-${
-        this.idGenerator(targetList.cards)
-          ? this.idGenerator(targetList.cards) + 1
-          : targetListId.split("-")[1].toString() + 1
-      }`,
+      id: `CR-${uuidv4()}`,
       name: `New Card ${targetList.cards.length + 1}`,
     };
     this.setState((previousState) => {
@@ -200,16 +190,6 @@ class App extends React.Component {
       previousState.boards[currentBoardIndex] = currentBoardData;
       return { boards: previousState.boards };
     });
-  };
-
-  /** Id generator for new card, list and board
-   * @param  data array to be iterated to find last id
-   */
-  idGenerator = (data) => {
-    const maxId = data.map((currentData) => {
-      return currentData.id.split("-")[1];
-    });
-    return maxId.length ? Math.max(...maxId) : 0;
   };
 
   /**Open card modal */
