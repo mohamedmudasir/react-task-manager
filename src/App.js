@@ -12,40 +12,51 @@ class App extends React.Component {
     this.state = {
       boards: [
         {
-          id: "BR-123",
+          id: "BR-100",
           name: "Personal",
           lists: [
             {
-              id: "LI-1231",
+              id: "LI-1001",
               name: "Home",
               cards: [
-                { id: "CR-12311", name: "Expenses- Jan" },
-                { id: "CR-12312", name: "Expenses - April" },
+                { id: "CR-10011", name: "Expenses- Jan" },
+                { id: "CR-10012", name: "Expenses - April" },
               ],
             },
             {
-              id: "LI-1232",
+              id: "LI-1002",
               name: "Mobile",
-              cards: [{ id: "CR-12321", name: "Mobile expenses - Jan" }],
+              cards: [
+                { id: "CR-10021", name: "Mobile expenses - Jan" },
+                { id: "CR-10022", name: "Mobile expenses - Jan" },
+              ],
             },
           ],
         },
         {
-          id: "BR-223",
+          id: "BR-101",
           name: "Travel",
           lists: [
             {
-              id: "LI-2231",
+              id: "LI-1011",
               name: "Australia",
               cards: [
-                { id: "CR-22311", name: "Travel-apr expenses" },
-                { id: "CR-22312", name: "Travel May expenses" },
+                { id: "CR-10111", name: "Travel-apr expenses" },
+                { id: "CR-10112", name: "Travel May expenses" },
+              ],
+            },
+            {
+              id: "LI-1012",
+              name: "Travel List",
+              cards: [
+                { id: "CR-10121", name: "New Card 2" },
+                { id: "CR-10122", name: "New Card5" },
               ],
             },
           ],
         },
       ],
-      selectedBoardId: "BR-123",
+      selectedBoardId: "BR-100",
       selectedBoardData: {},
       openDrawer: false,
       backgroundColor: "rgb(75, 191, 107)",
@@ -93,7 +104,7 @@ class App extends React.Component {
       id: `BR-${
         this.idGenerator(this.state.boards)
           ? this.idGenerator(this.state.boards) + 1
-          : 1211
+          : 510
       }`,
       name: boardName,
       lists: [],
@@ -233,51 +244,56 @@ class App extends React.Component {
   handleDragEnd = (result) => {
     /**Drop only inside a list */
     console.log(result, "result");
-    const { draggableId, source, destination } = result;
-    const startIndex = source.index;
-    const srcParentId = source.droppableId;
+    const { draggableId, destination } = result;
     if (destination) {
-      /** Drop logic for same list */
-      const endIndex = destination.index;
-      const destinationParentId = destination.droppableId;
-      if (srcParentId === destinationParentId) {
-        const srcListIndex = this.state.selectedBoardData.lists.findIndex(
-          ({ id }) => id === srcParentId
-        );
-        this.setState((previousState) => {
-          const srcListData =
-            previousState.selectedBoardData.lists[srcListIndex];
-          const srcCardData = srcListData.cards[startIndex];
-          srcListData.cards.splice(startIndex, 1);
-          srcListData.cards.splice(endIndex, 0, srcCardData);
-          return { boards: previousState.boards };
-        });
-      } else {
-        /**Drop logic for different list */
-        const currentBoardData = this.state.selectedBoardData;
-        const srcListIndex = currentBoardData.lists.findIndex(
-          ({ id }) => id === srcParentId
-        );
-        const desListIndex = currentBoardData.lists.findIndex(
-          ({ id }) => id === destinationParentId
-        );
-        this.setState((previousState) => {
-          const boardData = previousState.selectedBoardData;
-          const srcCardData = boardData.lists[srcListIndex].cards[startIndex];
-          boardData.lists[srcListIndex].cards.splice(startIndex, 1);
-          boardData.lists[desListIndex].cards.length
-            ? boardData.lists[desListIndex].cards.splice(
-                endIndex,
-                0,
-                srcCardData
-              )
-            : boardData.lists[desListIndex].cards.push(srcCardData);
-          return { boards: previousState.boards };
-        });
+      const draggableType = draggableId.split("-")[0];
+      if (draggableType === "CR") {
+        this.handleCardDragDrop(result);
+      } else if (draggableType === "LI") {
+        this.handleListDragDrop(result);
       }
     }
   };
-  handleCardDragDrop(result) {}
+  handleCardDragDrop(result) {
+    const { source, destination } = result;
+    const startIndex = source.index;
+    const srcParentId = source.droppableId;
+    const endIndex = destination.index;
+    const destinationParentId = destination.droppableId;
+    /** Drop logic for same list */
+    if (srcParentId === destinationParentId) {
+      const srcListIndex = this.state.selectedBoardData.lists.findIndex(
+        ({ id }) => id === srcParentId
+      );
+      this.setState((previousState) => {
+        const srcListData = previousState.selectedBoardData.lists[srcListIndex];
+        const srcCardData = srcListData.cards[startIndex];
+        srcListData.cards.splice(startIndex, 1);
+        srcListData.cards.splice(endIndex, 0, srcCardData);
+        return { boards: previousState.boards };
+      });
+    } else {
+      /**Drop logic for different list */
+      this.setState((previousState) => {
+        const boardData = previousState.selectedBoardData;
+        const srcListIndex = boardData.lists.findIndex(
+          ({ id }) => id === srcParentId
+        );
+        const desListIndex = boardData.lists.findIndex(
+          ({ id }) => id === destinationParentId
+        );
+        const srcCardData = boardData.lists[srcListIndex].cards[startIndex];
+        boardData.lists[srcListIndex].cards.splice(startIndex, 1);
+        boardData.lists[desListIndex].cards.length
+          ? boardData.lists[desListIndex].cards.splice(endIndex, 0, srcCardData)
+          : boardData.lists[desListIndex].cards.push(srcCardData);
+        return { boards: previousState.boards };
+      });
+    }
+  }
+  handleListDragDrop(result) {
+    console.log("list dragged");
+  }
   render() {
     return (
       <React.Fragment>

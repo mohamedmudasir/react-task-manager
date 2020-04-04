@@ -9,7 +9,7 @@ export default function ListComponent(props) {
   const { name, cards, id } = props.props;
   const [listEdit, editState] = useState(false);
   let buttonType;
-  const addNewCard = targetList => {
+  const addNewCard = (targetList) => {
     props.addNewCard(targetList);
   };
 
@@ -35,25 +35,25 @@ export default function ListComponent(props) {
     props.editList(listId);
   };
 
-  const deleteList = listsId => {
+  const deleteList = (listsId) => {
     props.deleteList(listsId);
   };
 
-  const updateListName = e => {
+  const updateListName = (e) => {
     console.log(e.target.value);
   };
   const editListName = listEdit ? (
     <div className="list-name-edit">
       <Input
         defaultValue={name}
-        onChange={e => updateListName(e)}
-        onMouseOut={e => editList(e, id)}
+        onChange={(e) => updateListName(e)}
+        onMouseOut={(e) => editList(e, id)}
       />
     </div>
   ) : null;
   return (
     <Droppable droppableId={id}>
-      {provided => (
+      {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
           <Card
             title={name}
@@ -69,10 +69,10 @@ export default function ListComponent(props) {
             headStyle={{
               textAlign: "left",
               borderBottom: "none",
-              fontWeight: "600"
+              fontWeight: "600",
             }}
             style={{
-              borderRadius: "5px"
+              borderRadius: "5px",
             }}
             bordered={false}
             className="list-container"
@@ -80,8 +80,8 @@ export default function ListComponent(props) {
             <div className="list-card-container">
               {cards.map((card, index) => (
                 <CardComponent
-                  draggable="true"
                   key={card.id.toString()}
+                  draggable="true"
                   props={card}
                   index={index}
                   deleteCard={props.deleteCard}
