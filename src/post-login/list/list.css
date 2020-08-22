@@ -1,42 +1,47 @@
 .list-container {
-    width: 350px;
-    position: relative;
+  background-color: #ebecf0;
+  border-radius: 3px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  position: relative;
+  white-space: normal;
 }
 
 .list-card {
-    position: relative;
+  position: relative;
 }
 
 .list-name-edit {
-    top: 11px;
-    position: absolute;
-    left: 10px;
-    width: 70%;
-
+  top: 11px;
+  position: absolute;
+  left: 10px;
+  width: 70%;
 }
 
 .list-name-edit input {
-    font-size: 16px;
-    font-weight: 500;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .list-header {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .list-action-btn {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
 .list-action-btn button {
-    align-self: flex-start;
+  align-self: flex-start;
 }
 
 .icon-container {
-    display: flex;
-    flex-direction: row;
-    width: 50px;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  width: 50px;
+  justify-content: space-between;
 }

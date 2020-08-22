@@ -1,12 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import BoardComponent from "./post-login/board/Board";
-import HeaderComponent from "./post-login/header/header";
-import SideNavigation from "./post-login/sideNavigation/sidenavigation";
-import LoginComponent from "./pre-login/login";
-import { DragDropContext } from "react-beautiful-dnd";
+import { LoginComponent } from "./pre-login/login";
 import { v4 as uuidv4 } from "uuid";
+import { DashBoardComponent } from "./post-login/dashboard/dashboard";
+import { AuthenticateRoute } from "./shared/route-authentication/authenticate-route";
 class App extends React.Component {
   constructor() {
     super();
@@ -34,65 +32,21 @@ class App extends React.Component {
             },
           ],
         },
-        {
-          id: "BR-101",
-          name: "Travel",
-          lists: [
-            {
-              id: "LI-1011",
-              name: "Australia",
-              cards: [
-                { id: "CR-10111", name: "Travel-apr expenses" },
-                { id: "CR-10112", name: "Travel May expenses" },
-              ],
-            },
-            {
-              id: "LI-1012",
-              name: "Travel List",
-              cards: [
-                { id: "CR-10121", name: "New Card 2" },
-                { id: "CR-10122", name: "New Card5" },
-              ],
-            },
-          ],
-        },
       ],
-      selectedBoardId: "BR-100",
+      selectedBoardId: null,
       selectedBoardData: {},
       openDrawer: false,
       backgroundColor: "rgb(75, 191, 107)",
     };
   }
-  componentWillMount() {
-    this.setState(
-      { selectedBoardId: this.state.boards[0].id },
-      this.getCurrentBoardData()
-    );
-    console.log("component will mount");
-    document.getElementById(
-      "root"
-    ).style.background = this.state.backgroundColor;
-  }
+
   componentDidMount() {
+    /** Set default data when mounting */
+    this.setState({ selectedBoardId: this.state.boards[0].id });
+    this.setState({ selectedBoardData: this.state.boards[0] });
     console.log("component did mount");
   }
-  componentWillUpdate() {
-    console.log("component will update");
-  }
-  shouldComponentUpdate(previousState, currentState) {
-    console.log("should component update");
-    if (previousState === currentState) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  componentDidUpdate() {
-    console.log("component did update");
-  }
-  componentWillReceiveProps() {
-    console.log("component will receive props");
-  }
+
   componentWillUnmount() {
     console.log("component to be destroyed");
   }
@@ -111,10 +65,10 @@ class App extends React.Component {
 
   /** To add new List - called from list component */
   addNewList = () => {
-    const { lists, id } = this.state.selectedBoardData;
+    const { lists = [] } = this.state.selectedBoardData;
     const payload = {
       id: `LI-${uuidv4()}`,
-      name: `New List ${lists.length + 1}`,
+      name: `New List ${lists?.length + 1}`,
       cards: [],
     };
     this.setState((previousState) => {
@@ -275,36 +229,31 @@ class App extends React.Component {
     console.log("list dragged");
   }
   render() {
+    const dashBoardProps = {
+      boards: this.state.boards,
+      openDrawer: this.state.openDrawer,
+      closeDrawer: this.closeDrawer,
+      updateBoardId: this.updateBoardId,
+      createNewBoard: this.createNewBoard,
+      handleDragEnd: this.handleDragEnd,
+      selectedBoardData: this.state.selectedBoardData,
+      addNewCard: this.addNewCard,
+      addNewList: this.addNewList,
+      deleteCard: this.deleteCard,
+      editList: this.editList,
+      deleteList: this.deleteList,
+    };
     return (
       <React.Fragment>
         <Router>
           <Switch>
-            <Route path="/" exact>
-              <LoginComponent />
-            </Route>
-            <Route path="/dashboard">
-              <div className="App">
-                <HeaderComponent />
-                <SideNavigation
-                  boards={this.state.boards}
-                  drawerState={this.state.openDrawer}
-                  closeDrawer={this.closeDrawer}
-                  updateBoardId={this.updateBoardId}
-                  createNewBoard={this.createNewBoard}
-                />
-                <DragDropContext onDragEnd={this.handleDragEnd}>
-                  <BoardComponent
-                    props={this.state.selectedBoardData}
-                    addNewList={() => this.addNewList()}
-                    addNewCard={this.addNewCard}
-                    deleteCard={this.deleteCard}
-                    changeBoard={this.openDrawer}
-                    editList={this.editList}
-                    deleteList={this.deleteList}
-                  />
-                </DragDropContext>
-              </div>
-            </Route>
+            <Route path="/login" exact component={LoginComponent} />
+            <AuthenticateRoute
+              exact
+              path="/"
+              {...dashBoardProps}
+              component={DashBoardComponent}
+            />
           </Switch>
         </Router>
       </React.Fragment>

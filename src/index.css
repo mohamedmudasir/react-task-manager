@@ -5,15 +5,16 @@ html {
 body {
   margin: 0;
   height: 100%;
-  background: #F9FAFC;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  background: #f9fafc;
+  font: url("../src/assets/fonts//SF-Font-Compact.dmg");
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
 #root {
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  z-index: 1;
 }
 
 body::-webkit-scrollbar {

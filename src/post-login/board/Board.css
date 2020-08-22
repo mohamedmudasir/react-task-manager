@@ -1,35 +1,43 @@
 .board-container {
-    height: 100%;
-    overflow-y: scroll;
-    padding: 20px;
+  height: 100%;
+  padding: 20px;
 }
 
 .card-list-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 30px;
 }
 
 .action-btn {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .action-btn button {
-    width: auto;
-    padding: 0 10px;
-    height: 30px;
-    font-weight: bold;
-    margin-right: 20px;
+  width: auto;
+  padding: 0 10px;
+  height: 30px;
+  font-weight: bold;
+  margin-right: 20px;
 }
 
 .board-list-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
-.board-list-container>div {
-    margin-right: 10px;
-    margin-bottom: 10px;
+.board-list-container > div {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.list-error-message {
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  transform: translate(-45%, -45%);
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
 }

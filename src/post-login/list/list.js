@@ -4,7 +4,6 @@ import "./list.css";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Card, Input } from "antd";
 import { Droppable } from "react-beautiful-dnd";
-
 export default function ListComponent(props) {
   const { name, cards, id } = props.props;
   const [listEdit, editState] = useState(false);

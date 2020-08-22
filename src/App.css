@@ -1,7 +1,11 @@
-@import '~antd/dist/antd.css';
-
-
+@import "~antd/dist/antd.css";
 
 .ant-card-body {
   padding: 10px;
+}
+.dashboard-wrapper {
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+  background: rgb(75, 191, 107);
 }
