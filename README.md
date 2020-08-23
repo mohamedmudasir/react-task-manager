@@ -1,6 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## React task manager
 
-## Available Scripts
+This is a copy of trello using antd and styled components, still work in progress
 
 In the project directory, you can run:
 
